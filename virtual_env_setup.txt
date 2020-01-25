@@ -1,0 +1,12 @@
+pip3 install virtualenv
+
+git clone the repo and cd into it
+
+python3 -m venv env
+
+
+To activate virtual environment:
+source env/bin/activate
+
+To deactivate:
+deactivate
