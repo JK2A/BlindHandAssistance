@@ -1,0 +1,13 @@
+# Library dependencies for the python code.  You need to install these with
+# `pip install -r requirements.txt` before you can run this.
+
+# Google Cloud API
+google-cloud-texttospeech
+google-cloud-speech
+
+# Audio In
+# Do 'sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
+      sudo apt-get install ffmpeg libav-tools' first if pyaudio does not initially install
+pyaudio
+
+# Audio Out

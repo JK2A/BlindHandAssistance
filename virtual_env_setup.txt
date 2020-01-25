@@ -13,6 +13,6 @@ deactivate
 
 
 
-by default python version should be 3.7
+by default python version should be 3.6
 
 
