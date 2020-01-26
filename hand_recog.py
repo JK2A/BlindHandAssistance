@@ -12,9 +12,25 @@ from utils import detector_utils as detector_utils
 
 
 
-
-
 detection_graph, sess = detector_utils.load_inference_graph()
+
+
+def getHandPosition(image_np):
+    boxes, scores = detector_utils.detect_objects(image_np,
+                                                  detection_graph, sess)
+    i = np.argmax(scores)
+    score = scores[i]
+    boxLoc = boxes[i]
+
+    # y min, x min, y max, x max
+
+    if score > 0.5:
+        # print(score)
+        x = int(np.average((boxLoc[1], boxLoc[3])) * image_np.shape[1])
+        y = int(np.average((boxLoc[0], boxLoc[2])) * image_np.shape[0])
+
+        return (x,y)
+    return None
 
 if __name__ == '__main__':
 
