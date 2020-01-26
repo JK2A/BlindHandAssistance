@@ -24,6 +24,7 @@ import time
 # methods
 
 def load_model(model_name):
+
   base_url = 'http://download.tensorflow.org/models/object_detection/'
   model_file = model_name + '.tar.gz'
   model_dir = tf.keras.utils.get_file(
@@ -32,6 +33,7 @@ def load_model(model_name):
     untar=True)
 
   model_dir = pathlib.Path(model_dir)/"saved_model"
+
 
   model = tf.saved_model.load(str(model_dir))
   model = model.signatures['serving_default']
@@ -80,8 +82,8 @@ def show_inference(model, image, category_index):
 
 
   # imshow here
-  cv2.imshow('video', image_np)
-  cv2.waitKey(1)
+  # cv2.imshow('video', image_np)
+  # cv2.waitKey(1)
 
   return detected_objects
 
@@ -136,7 +138,6 @@ def main():
     final_dict = show_inference(detection_model, frame, category_index)
 
 
-
 utils_ops.tf = tf.compat.v1
 
 # Patch the location of gfile
@@ -148,7 +149,6 @@ category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABE
 
 model_name = 'ssd_mobilenet_v1_coco_2017_11_17'
 detection_model = load_model(model_name)
-
 
 def getObjectPositions(frame):
   return show_inference(detection_model, frame, category_index)

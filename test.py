@@ -31,9 +31,9 @@ def main():
 
 
 		############ HAND POSITION ############
-		# hand_position = hand_detect_model(frame)
-		# if hand_position is not None:
-		# 	cv.circle(frame, hand_position, 5, (255, 0, 0), -1)
+		hand_position = hand_detect_model(frame)
+		if hand_position is not None:
+			cv.circle(frame, hand_position, 5, (255, 0, 0), -1)
 
 		############ OBJECT POSITION ############
 		object_dictionary = object_detect_model(frame)
@@ -58,6 +58,7 @@ def object_detect_model(frame):
 #this should return coordinates as tuple (x,y) for the center of ONE hand or None
 def hand_detect_model(frame):
 	return getHandPosition(frame)
+
 
 
 #jack stuff
