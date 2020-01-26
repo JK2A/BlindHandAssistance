@@ -2,7 +2,7 @@
 # `pip install -r requirements.txt` before you can run this.
 
 # Google Cloud API
-google-cloud-texttospeech
+gTTS
 google-cloud-speech
 
 # Audio In
@@ -11,3 +11,4 @@ google-cloud-speech
 pyaudio
 
 # Audio Out
+pydub

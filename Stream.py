@@ -8,17 +8,29 @@ from __future__ import division
 
 import re
 import sys
+import os
 
 from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
-from google.cloud import texttospeech
+from gtts import gTTS
+
 import pyaudio
+from pydub import AudioSegment
+from pydub.playback import play
+
+
 from six.moves import queue
+
+# Manually setting environment variable
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.getcwd(), "Google_Key/Blind_Assistance.json")
+
 
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
+
+isSpeaking = False
 
 
 class MicrophoneStream(object):
@@ -63,6 +75,15 @@ class MicrophoneStream(object):
         self._buff.put(in_data)
         return None, pyaudio.paContinue
 
+    def play_audio(self, text):
+        output = gTTS(text=text, lang='en', slow=False)
+        output.save("Temp/output.mp3")
+        song = AudioSegment.from_mp3("Temp/output.mp3")
+        self._audio_stream.stop_stream()
+        play(song)
+        self._audio_stream.start_stream()
+        os.remove("Temp/output.mp3")
+
     def generator(self):
         while not self.closed:
             # Use a blocking get() to ensure there's at least one chunk of
@@ -80,13 +101,15 @@ class MicrophoneStream(object):
                     if chunk is None:
                         return
                     data.append(chunk)
+                    if len(data) > 1:
+                        break
                 except queue.Empty:
                     break
 
             yield b''.join(data)
 
 
-def listen_print_loop(responses):
+def listen_print_loop(responses, stream):
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -134,33 +157,29 @@ def listen_print_loop(responses):
             print(transcript + overwrite_chars)
             if not prompted:
                 if re.search(r'\b(Wake Up)\b', transcript, re.I):
-                    print('Listening...')
+                    stream.play_audio('Listening, what are you looking for?')
                     prompted = True
             elif prompted and not listening:
                 # confirmation
                 obj = transcript
-                print("Are you looking for "+obj+"?")
+                stream.play_audio("Are you looking for "+obj+"?")
+                listening = True
             elif prompted and listening:
                 if re.search(r'\b(Yes|Yeah)\b', transcript, re.I):
-                    print("Confirmed")
+                    stream.play_audio("Confirmed")
                     return obj
                 elif re.search(r'\b(No|no)\b', transcript, re.I):
-                    print("What are you looking for?")
+                    stream.play_audio("What are you looking for?")
                     listening = False
                 else:
                     listening = False
-                    print("Didn't understand. What are you looking for?")
+                    stream.play_audio("Didn't understand. What are you looking for?")
 
 
 def main():
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
-
-    # Manually setting environment variable
-    import os
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.getcwd(), "Google_Key/Blind_Assistance.json")
-
     client = speech.SpeechClient()
     config = types.RecognitionConfig(
         encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
@@ -179,8 +198,10 @@ def main():
 
         responses = client.streaming_recognize(streaming_config, requests)
         # Now, put the transcription responses to use.
-        return listen_print_loop(responses)
+        return listen_print_loop(responses, stream)
 
 
 if __name__ == '__main__':
+    import threading
+    print(threading.active_count())
     main()
