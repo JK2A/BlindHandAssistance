@@ -14,6 +14,7 @@ from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
 from gtts import gTTS
+import nltk
 
 import pyaudio
 from pydub import AudioSegment
@@ -30,8 +31,6 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.getcwd(), "Google
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
 
-isSpeaking = False
-
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
@@ -42,6 +41,7 @@ class MicrophoneStream(object):
         # Create a thread-safe buffer of audio data
         self._buff = queue.Queue()
         self.closed = True
+        self.obj = ""
 
     def __enter__(self):
         self._audio_interface = pyaudio.PyAudio()
@@ -148,27 +148,37 @@ def listen_print_loop(responses, stream):
         # some extra spaces to overwrite the previous result
         overwrite_chars = ' ' * (num_chars_printed - len(transcript))
 
-        obj = ""
         if not result.is_final:
             sys.stdout.write(transcript + overwrite_chars + '\r')
             sys.stdout.flush()
             num_chars_printed = len(transcript)
         else:
+            is_noun = lambda pos: pos == 'NN'
+            is_bin_response = lambda pos: pos == 'UH'or pos == 'NNS'
+            is_command = lambda pos: pos == 'VB' or pos == 'RP'
             print(transcript + overwrite_chars)
             if not prompted:
-                if re.search(r'\b(Wake Up)\b', transcript, re.I):
+                tokenized = nltk.word_tokenize(transcript)
+                nouns = [word for (word, pos) in nltk.pos_tag(tokenized) if is_command(pos)]
+                if "wake" in nouns and "up" in nouns:
                     stream.play_audio('Listening, what are you looking for?')
                     prompted = True
             elif prompted and not listening:
                 # confirmation
-                obj = transcript
-                stream.play_audio("Are you looking for "+obj+"?")
+                tokenized = nltk.word_tokenize(transcript)
+                nouns = [word for (word, pos) in nltk.pos_tag(tokenized) if is_noun(pos)]
+                if len(nouns) > 0:
+                    stream.obj = nouns[0]
+                stream.play_audio("Are you looking for "+stream.obj+"?")
                 listening = True
             elif prompted and listening:
-                if re.search(r'\b(Yes|Yeah)\b', transcript, re.I):
-                    stream.play_audio("Okay, looking for " + obj)
-                    return obj
-                elif re.search(r'\b(No|no)\b', transcript, re.I):
+                tokenized = nltk.word_tokenize(transcript)
+                responses = [word for (word, pos) in nltk.pos_tag(tokenized) if is_bin_response(pos)]
+                print(responses)
+                if re.search(r'\b(Yes|Yeah|Sure|Yep)\b', " ".join(responses), re.I):
+                    stream.play_audio("Okay, looking for "+stream.obj)
+                    return str.strip(stream.obj)
+                elif re.search(r'\b(No|no|nope|nah)\b', " ".join(responses), re.I):
                     stream.play_audio("What are you looking for?")
                     listening = False
                 else:
@@ -202,4 +212,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+
+    print(main())
