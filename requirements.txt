@@ -12,3 +12,15 @@ pyaudio
 
 # Audio Out
 pydub
+
+# Neural Net
+tensorflow
+
+# Utility
+numpy
+
+# Video Processing
+opencv-python
+
+# Graphing results
+matplotlib
