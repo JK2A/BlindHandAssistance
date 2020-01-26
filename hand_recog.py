@@ -29,7 +29,8 @@ def getHandPosition(image_np):
         x = int(np.average((boxLoc[1], boxLoc[3])) * image_np.shape[1])
         y = int(np.average((boxLoc[0], boxLoc[2])) * image_np.shape[0])
 
-        return (x,y)
+        return x, y
+
     return None
 
 if __name__ == '__main__':

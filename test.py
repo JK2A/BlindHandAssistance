@@ -3,7 +3,6 @@ import numpy as np
 
 import os
 
-import handtracking.utils
 from hand_recog import getHandPosition
 
 
@@ -24,16 +23,14 @@ def main():
 	video_capture = cv.VideoCapture(0)
 	while(True):
 		ret, frame = video_capture.read()
-		print(ret)
-		print(frame.shape)
-		print(np.average(frame))
 		if not ret:
 			continue
 		#object_dictionary = object_detect_model(frame)
 		#desired_object_locations_list = object_dictionary[desired_object]
 		hand_position = hand_detect_model(frame)
+
 		if hand_position is not None:
-			cv2.circle(image_np, hand_position, 5, (255,0,0), -1)
+			cv.circle(frame, hand_position, 5, (255,0,0), -1)
 
 		#if hand_position != None:
 			#calculate distance to correct object
@@ -52,7 +49,7 @@ def object_detect_model(frame):
 #akarsh stuff
 #this should return coordinates as tuple (x,y) for the center of ONE hand or None
 def hand_detect_model(frame):
-	utils.getHandPosition(frame)
+	return getHandPosition(frame)
 
 
 #jack stuff
