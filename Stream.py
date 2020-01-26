@@ -166,7 +166,7 @@ def listen_print_loop(responses, stream):
                 listening = True
             elif prompted and listening:
                 if re.search(r'\b(Yes|Yeah)\b', transcript, re.I):
-                    stream.play_audio("Confirmed")
+                    stream.play_audio("Okay, looking for " + obj)
                     return obj
                 elif re.search(r'\b(No|no)\b', transcript, re.I):
                     stream.play_audio("What are you looking for?")
@@ -202,6 +202,4 @@ def main():
 
 
 if __name__ == '__main__':
-    import threading
-    print(threading.active_count())
     main()
