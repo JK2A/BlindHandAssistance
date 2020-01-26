@@ -4,6 +4,7 @@ import numpy as np
 import os
 
 from hand_recog import getHandPosition
+from hackathon_object_detection import getObjectPositions
 
 
 
@@ -27,24 +28,31 @@ def main():
 			continue
 		#object_dictionary = object_detect_model(frame)
 		#desired_object_locations_list = object_dictionary[desired_object]
-		hand_position = hand_detect_model(frame)
 
-		if hand_position is not None:
-			cv.circle(frame, hand_position, 5, (255,0,0), -1)
+
+		############ HAND POSITION ############
+		# hand_position = hand_detect_model(frame)
+		# if hand_position is not None:
+		# 	cv.circle(frame, hand_position, 5, (255, 0, 0), -1)
+
+		############ OBJECT POSITION ############
+		object_dictionary = object_detect_model(frame)
+		print(object_dictionary)
+
 
 		#if hand_position != None:
 			#calculate distance to correct object
-		cv.imshow('frame',frame)
+		cv.imshow('frame', frame)
 		cv.waitKey(1)
 
-	cap.release()
+	video_capture.release()
 	cv.destroyAllWindows()
 
 
 #kush stuff
 #this should return a dictionary. {object_name: [(x, y)]}
 def object_detect_model(frame):
-	pass
+	return getObjectPositions(frame)
 
 #akarsh stuff
 #this should return coordinates as tuple (x,y) for the center of ONE hand or None
@@ -63,7 +71,7 @@ def get_desired_object(desired_object):
 def getMinimumDistance(obj_locations_list, hand_position, frame):
 	min = frame.shape(0)**2 + frame.shape(1)**2
 	for obj_loc in obj_locations_list:
-		min = min((obj_loc[0] - hand_pos[0])**2 + (obj_loc[1] - hand_pos[1])**2, min)
+		min = min((obj_loc[0] - hand_position[0])**2 + (obj_loc[1] - hand_position[1])**2, min)
 	return min
 
 

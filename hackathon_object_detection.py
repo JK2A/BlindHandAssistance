@@ -11,12 +11,15 @@ from io import StringIO
 from matplotlib import pyplot as plt
 from PIL import Image
 import pathlib
-from object_detection.utils import ops as utils_ops
-from object_detection.utils import label_map_util
-from object_detection.utils import visualization_utils as vis_util
+from research.object_detection.utils import ops as utils_ops
+from research.object_detection.utils import label_map_util
+from research.object_detection.utils import visualization_utils as vis_util
 
 import cv2
 import time
+
+
+
 
 # methods
 
@@ -125,19 +128,6 @@ def run_inference_for_single_image(model, image):
 def main():
 
   # patch tf1 into `utils.ops`
-  utils_ops.tf = tf.compat.v1
-
-  # Patch the location of gfile
-  tf.gfile = tf.io.gfile
-
-  # List of the strings that is used to add correct label for each box.
-  PATH_TO_LABELS = 'data/mscoco_label_map.pbtxt'
-  category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS, use_display_name=True)
-
-
-
-  model_name = 'ssd_mobilenet_v1_coco_2017_11_17'
-  detection_model = load_model(model_name)
 
   video_capture = cv2.VideoCapture(0)
 
@@ -145,7 +135,23 @@ def main():
     ret, frame = video_capture.read(0)
     final_dict = show_inference(detection_model, frame, category_index)
 
-    
+
+
+utils_ops.tf = tf.compat.v1
+
+# Patch the location of gfile
+tf.gfile = tf.io.gfile
+
+# List of the strings that is used to add correct label for each box.
+PATH_TO_LABELS = 'data/mscoco_label_map.pbtxt'
+category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS, use_display_name=True)
+
+model_name = 'ssd_mobilenet_v1_coco_2017_11_17'
+detection_model = load_model(model_name)
+
+
+def getObjectPositions(frame):
+  return show_inference(detection_model, frame, category_index)
 
 if __name__ == "__main__":
   main()
