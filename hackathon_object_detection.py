@@ -54,14 +54,18 @@ def show_inference(model, image, category_index):
     use_normalized_coordinates=True,
     line_thickness=8)
 
-
   detected_objects = {}
   current = 0
+
   while current < len(output_dict['detection_scores']) and output_dict['detection_scores'][current] > 0.7:
     current_obj_index = output_dict['detection_classes'][current] # int
     obj_name = category_index[current_obj_index]['name'] # string
-    location = get_box_center(output_dict['detection_boxes'][current]) # pass in 1x4 np array
-
+    location = output_dict['detection_boxes'][current] # pass in 1x4 np array
+  
+    x = int(np.average((location[1], location[3])) * image_np.shape[1])
+    y = int(np.average((location[0], location[2])) * image_np.shape[0])
+    location = (x,y)
+        
     if obj_name not in detected_objects:
       detected_objects[obj_name] = []
     detected_objects[obj_name].append(location)
@@ -69,16 +73,17 @@ def show_inference(model, image, category_index):
     current += 1
 
 
-  print(detected_objects)
+  # print(detected_objects)
+
+
   # imshow here
   cv2.imshow('video', image_np)
   cv2.waitKey(1)
 
+  return detected_objects
+
 # ymin, xmin, ymax, xmax = box
-def get_box_center(box_loc):
-  x = (box_loc[1] + box_loc[3])/2
-  y = (box_loc[0] + box_loc[2])/2
-  return x,y
+
 
 
 
@@ -138,7 +143,9 @@ def main():
 
   while True:
     ret, frame = video_capture.read(0)
-    show_inference(detection_model, frame, category_index)
+    final_dict = show_inference(detection_model, frame, category_index)
+
+    
 
 if __name__ == "__main__":
   main()
