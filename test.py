@@ -37,7 +37,6 @@ def main():
 
 		############ OBJECT POSITION ############
 		object_dictionary = object_detect_model(frame)
-		print(object_dictionary)
 
 
 		#if hand_position != None:
