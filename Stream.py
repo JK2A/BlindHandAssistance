@@ -109,7 +109,7 @@ class MicrophoneStream(object):
             yield b''.join(data)
 
 
-def listen_print_loop(responses, stream):
+def listen_print_loop(responses, stream, category_index):
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -169,8 +169,11 @@ def listen_print_loop(responses, stream):
                 nouns = [word for (word, pos) in nltk.pos_tag(tokenized) if is_noun(pos)]
                 if len(nouns) > 0:
                     stream.obj = nouns[0]
-                stream.play_audio("Are you looking for "+stream.obj+"?")
-                listening = True
+                if stream.obj not in category_index:
+                    stream.play_audio("Sorry, I cannot detect " + stream.obj + ". Please ask for a different object." )
+                else:
+                    stream.play_audio("Are you looking for "+stream.obj+"?")
+                    listening = True
             elif prompted and listening:
                 tokenized = nltk.word_tokenize(transcript)
                 responses = [word for (word, pos) in nltk.pos_tag(tokenized) if is_bin_response(pos)]
@@ -186,7 +189,8 @@ def listen_print_loop(responses, stream):
                     stream.play_audio("Didn't understand. What are you looking for?")
 
 
-def main():
+def main(category_index):
+    category_index = [val['name'] for val in category_index.values()]
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
@@ -208,7 +212,7 @@ def main():
 
         responses = client.streaming_recognize(streaming_config, requests)
         # Now, put the transcription responses to use.
-        return listen_print_loop(responses, stream)
+        return listen_print_loop(responses, stream, category_index)
 
 
 if __name__ == '__main__':

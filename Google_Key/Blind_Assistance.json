@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "blindassistance-1579972325272",
+  "private_key_id": "9f0c44a818026f08d3c756df67e8f7ffc76f2180",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCk25LDoykf2vUX\nOyKTIvnq2VudU8wz518wH4rP+R1Y2mWgTgOzWK1Cu1L5fDLVvxqXsLRWX03vQSq3\nNQuqbvRXaIVJx8Vm8jgfdJf1uqsuUeOuqt0A0cWXoqjDL8K+JCpdG/R2gtzY0t4U\n3Z4Emefpqrdh78NvNEyYd8Qasy7rS36HT5VUf2EAGhnL5PDRKBTjkEQoyhImvDon\n1akjH3DpGEssNGSCpmxVfDv38BhCwiNmjSSa3z19AiCBGjXLbQeDeg172N+eA8L7\n3YTWugMEUBbg1gl+luCz2U7nLUEVW4TwqMS3fmkCW6fP0Ntz2wVWyS8KJLEj7OQI\nHM5MO16JAgMBAAECggEAHSlVCQO91Mt1wsX8W/QaKrOHq+kEjGLfWOMfeiHqEctS\nIjzilTE4tr7tksGoOVycXtxMTiH+JnYL0QwSU/PcB3Eu8Knkjo0GpfPJJJfAS4mD\nQaSqQsiYj/XfLeWvKFS75Kv6/pKv76+/RogcOVqjJheDaFDR7IQfD3JSD1oGUOsJ\nWHOGF6MT0NdGjSLxS8znVSLtyCNcQSysr3k+XJHhhMlo13AZxw7ux5sz28QqWjZb\nZWEVe8c/jvljqPXYQt/9W7tklsZY/aOzXnGpmO16+9v90KlKOmfH+qDoicdfF+x2\nQ2Sh9Iiynlk08r85dWO01GP+oDHNn/Da51XvcvAgnQKBgQDPElvlY5ujwvb6S30y\n++OT8YEr6BHIq1EdKo8PL0KtFfzJN0gigp8PAJjDD32byT83vOg9PkRpEcQfk3F9\nlKYvwytCqy2kv+K9SB5sPMvJwwZK+HmT3zKzM0p/lDmywFOAvakMO93/dqqjdTlD\nbysr7kpS7l/U8JGSPamvMF/L9QKBgQDLz7cHzJqXUak+wCnxxDF1u20KyrkVmnfl\nkFk8wwxvJQItBjWeFla4+tA3hvIcaAGVvSpvjgKHTQz6F28cnpUQJUw6pOFQ2fN8\nx79LPwIxpqu5ZiAv3rD9W7RGbcdG/5BzXfgAI0f3qfALs/OoaYkHRwhyNNWhZ8aw\neNRvGdXfxQKBgQCEZoi7s2Tg4NhqUbpLzyNEhTbCjDBSzreenoe6fc10PorTXbWR\n21M4lHkYv97grVzulqsn/ZhgVivAxNXcJh/cij4u8qTMoqSnwmUxb+4do8VySk3y\nbtRMII+R44TA9phtyNc+K0lW/tk8iseChqJkBIkhXamIzglGKIdGrPeTwQKBgAH8\nuX0i+pLlIfBRsVcBIbZTKIIFbf6O7gJYAPa9tB5VTwsfV2B+OUQ+dc9EypGKVhGe\nsY465T1qe+joV5YA2dU5d9/Ogb/nEB+0VuIl8CCJznzVSRUOZ81gmoZhRaMklMT7\nMpLVxTrd9lA25fZLaSGgCK4MY9TaDS7lTrTynIo9AoGBAMyFDvz7Lt9uv9UtI8iz\nEqNjwEnlDTWXQP21hGRknkH0bO9QsHyigNqVFDamOhKuTtkAbeBVZGTfsgqTEMY6\n2J5viLQ9cJVwdAvmEgHkfyKTbhj+2L87PwlnMNjb+H+ZTi4kowwFIU/PuQ+bQHWS\nCPts3KqFsBZhvr3p2r0sjqqe\n-----END PRIVATE KEY-----\n",
+  "client_email": "blindassist@blindassistance-1579972325272.iam.gserviceaccount.com",
+  "client_id": "108290194462903090237",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/blindassist%40blindassistance-1579972325272.iam.gserviceaccount.com"
+}

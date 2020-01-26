@@ -40,6 +40,8 @@ def load_model(model_name):
 
   return model
 
+def get_category_index():
+  return category_index
 
 def show_inference(model, image, category_index):
   # the array based representation of the image will be used later in order to prepare the
@@ -62,7 +64,7 @@ def show_inference(model, image, category_index):
   detected_objects = {}
   current = 0
 
-  while current < len(output_dict['detection_scores']) and output_dict['detection_scores'][current] > 0.7:
+  while current < len(output_dict['detection_scores']) and output_dict['detection_scores'][current] > 0.5:
     current_obj_index = output_dict['detection_classes'][current] # int
     obj_name = category_index[current_obj_index]['name'] # string
     location = output_dict['detection_boxes'][current] # pass in 1x4 np array

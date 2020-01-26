@@ -2,12 +2,12 @@ import cv2 as cv
 import numpy as np
 
 import os
-
+from Beep2 import Beep2
 from hand_recog import getHandPosition
-from hackathon_object_detection import getObjectPositions
-
-
-
+from hackathon_object_detection import getObjectPositions, get_category_index
+import Stream
+import math
+from Beep import WavePlayerLoop
 """AmitehMain():
 // ret, frame = opencv.video()
 
@@ -20,16 +20,17 @@ string = JackMain()
 
 def main():
 	#os.system("python hackathon_object_detection.py ;2D") #runs kush's script
-	#desired_object = get_desired_object()
+	os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/akarshkumar0101/Developer/Hackathons/BlindHandAssistance/Google_Key/Blind_Assistance.json"
+
+	desired_object = Stream.main(get_category_index())
+
 	video_capture = cv.VideoCapture(0)
 	while(True):
+		# prev_dist = math.inf
 		ret, frame = video_capture.read()
 		if not ret:
 			continue
-		#object_dictionary = object_detect_model(frame)
-		#desired_object_locations_list = object_dictionary[desired_object]
-
-
+		# print(frame.shape)
 		############ HAND POSITION ############
 		hand_position = hand_detect_model(frame)
 		if hand_position is not None:
@@ -37,10 +38,22 @@ def main():
 
 		############ OBJECT POSITION ############
 		object_dictionary = object_detect_model(frame)
+		if desired_object not in object_dictionary:
+			desired_object_locations_list = []
+		else:
+			desired_object_locations_list = object_dictionary[desired_object]
 
-
-		#if hand_position != None:
+		if hand_position is not None:
 			#calculate distance to correct object
+			#beep = WavePlayerLoop("/Users/akarshkumar0101/Developer/Hackathons/BlindHandAssistance/Sounds/shortbeep.wav")
+			#beep.run()
+			beep = Beep2("/Users/akarshkumar0101/Developer/Hackathons/BlindHandAssistance/Sounds/shortbeep.wav")
+			beep.play()
+			dist = getMinimumDistance(desired_object_locations_list, hand_position, frame)
+			print(dist)
+			print(100000/dist)
+			beep.change_volume(max(.1, 100000/dist))
+
 		cv.imshow('frame', frame)
 		cv.waitKey(1)
 
@@ -62,17 +75,20 @@ def hand_detect_model(frame):
 
 #jack stuff
 #this function should return a string for the desired object. ie: "apple"
-def get_desired_object(desired_object):
 
-	pass
 
 #amitesh stuff
 #this function will find the minimum distance between the hand and anyObject available.
 def getMinimumDistance(obj_locations_list, hand_position, frame):
-	min = frame.shape(0)**2 + frame.shape(1)**2
+	m = frame.shape[0]**2 + frame.shape[1]**2
 	for obj_loc in obj_locations_list:
-		min = min((obj_loc[0] - hand_position[0])**2 + (obj_loc[1] - hand_position[1])**2, min)
-	return min
+		print("obj lock")
+		print(obj_loc)
+
+		print("hand pos")
+		print(hand_position)
+		m = min((obj_loc[0] - hand_position[0])**2 + (obj_loc[1] - hand_position[1])**2, m)
+	return m
 
 
 main()

@@ -13,6 +13,8 @@ import sys
 # PyAudio Library
 import pyaudio
 
+import time
+
 # Pydub for .mp3 to .wav
 import pydub
 from pydub import AudioSegment
@@ -55,16 +57,17 @@ class WavePlayerLoop(threading.Thread):
 
         # PLAYBACK LOOP
         data = wf.readframes(self.CHUNK)
-        lock = threading.Lock()
-        cv = threading.Condition(lock)
-        cv.acquire()
+        # lock = threading.Lock()
+        # cv = threading.Condition(lock)
+        # cv.acquire()
         while self.loop:
             stream.write(data)
             data = wf.readframes(self.CHUNK)
             if data == b'':  # If file is over then rewind.
                 wf.rewind()
                 data = wf.readframes(self.CHUNK)
-                cv.wait(timeout=.75 *self.speed)
+                time.sleep(.75*self.speed)
+                # cv.wait(timeout=.75 *self.speed)
 
         stream.close()
         player.terminate()
