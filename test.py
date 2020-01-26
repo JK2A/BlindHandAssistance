@@ -17,6 +17,9 @@ string = JackMain()
 
 """
 
+prevHandPos = None
+prevObjectPos = None
+
 
 def main():
 	#os.system("python hackathon_object_detection.py ;2D") #runs kush's script
@@ -25,6 +28,7 @@ def main():
 	desired_object = Stream.main(get_category_index())
 
 	video_capture = cv.VideoCapture(0)
+
 	while(True):
 		# prev_dist = math.inf
 		ret, frame = video_capture.read()
@@ -34,6 +38,7 @@ def main():
 		############ HAND POSITION ############
 		hand_position = hand_detect_model(frame)
 		if hand_position is not None:
+			prevHandPos = hand_position
 			cv.circle(frame, hand_position, 5, (255, 0, 0), -1)
 
 		############ OBJECT POSITION ############
@@ -52,7 +57,7 @@ def main():
 			dist = getMinimumDistance(desired_object_locations_list, hand_position, frame)
 			print(dist)
 			print(100000/dist)
-			beep.change_volume(max(.1, 100000/dist))
+			beep.change_volume(min(1, max(.1, 100000/dist)))
 
 		cv.imshow('frame', frame)
 		cv.waitKey(1)
@@ -77,6 +82,7 @@ def hand_detect_model(frame):
 #this function should return a string for the desired object. ie: "apple"
 
 
+
 #amitesh stuff
 #this function will find the minimum distance between the hand and anyObject available.
 def getMinimumDistance(obj_locations_list, hand_position, frame):
@@ -87,7 +93,16 @@ def getMinimumDistance(obj_locations_list, hand_position, frame):
 
 		print("hand pos")
 		print(hand_position)
-		m = min((obj_loc[0] - hand_position[0])**2 + (obj_loc[1] - hand_position[1])**2, m)
+
+		global prevObjectPos
+
+		dist = (obj_loc[0] - hand_position[0])**2 + (obj_loc[1] - hand_position[1]) ** 2
+		if dist < m:
+			m = dist
+			prevObjectPos = obj_loc
+
+		# m = min((obj_loc[0] - hand_position[0])**2 + (obj_loc[1] - hand_position[1])**2, m)
+
 	return m
 
 
