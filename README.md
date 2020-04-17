@@ -1,4 +1,6 @@
 # BlindHandAssistance (Final name TBD)
+Won: Best Accessibility Hack (JP Morgan), Best use of Google Cloud (Google)
+
 An open-sourced project built at TAMUHack 2020 with the goal of assisting visually impaired individuals in their daily life. 
 
 This project uses the Google Cloud API (speech <-> text) and Tensorflow 2. Built completely in Python3, this project can run on a CPU with minimal lag. 
